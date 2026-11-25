@@ -25,9 +25,10 @@ vi.mock("firebase/app", () => ({
   FirebaseError: sdk.FirebaseError,
   getApps: () => [],
   getApp: vi.fn(),
-  initializeApp: vi.fn(() => ({})),
+  initializeApp: vi.fn(() => ({ options: {} })),
 }));
 vi.mock("firebase/auth", () => ({
+  connectAuthEmulator: vi.fn(),
   getAuth: () => ({
     signOut: vi.fn(),
     get currentUser() {

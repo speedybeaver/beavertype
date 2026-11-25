@@ -1,5 +1,6 @@
 import { FirebaseError } from "firebase/app";
 import {
+  connectAuthEmulator,
   getAuth,
   Auth as AuthType,
   User,
@@ -74,7 +75,14 @@ export const firebaseAuthProvider: AuthProvider = {
 
   async init(onUserChange) {
     try {
-      Auth = getAuth(await getFirebaseApp());
+      const app = await getFirebaseApp();
+      Auth = getAuth(app);
+      // "demo-" projects only exist in the local emulator (see `pnpm dev`)
+      if (app.options.projectId?.startsWith("demo-") === true) {
+        connectAuthEmulator(Auth, "http://127.0.0.1:9099", {
+          disableWarnings: true,
+        });
+      }
 
       const rememberMe =
         window.localStorage.getItem("firebasePersistence") === "LOCAL";

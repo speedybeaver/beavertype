@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "concurrency": "20",
   "globalDependencies": [".env"],
   "globalPassThroughEnv": ["TMPDIR"],
   "tasks": {
@@ -53,13 +54,17 @@
     },
     "@monkeytype/frontend#dev": {
       "dependsOn": ["^build"],
-      "env": ["BACKEND_URL", "RECAPTCHA_SITE_KEY", "SERVER_OPEN"],
+      "env": [
+        "BACKEND_URL",
+        "RECAPTCHA_SITE_KEY",
+        "SERVER_OPEN",
+        "FIREBASE_EMULATOR"
+      ],
       "persistent": true
     },
-    "@monkeytype/backend#dev": {
-      "dependsOn": ["^build"],
-      "env": ["DB_URI", "REDIS_URI", "PORT"],
-      "persistent": true
+    "//#emulator": {
+      "persistent": true,
+      "cache": false
     }
   }
 }
