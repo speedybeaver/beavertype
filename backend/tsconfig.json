@@ -1,20 +1,11 @@
 {
   "extends": "@monkeytype/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "target": "ES6",
-    "noImplicitAny": false,
-    "strictFunctionTypes": false,
-    "useUnknownInCatchVariables": false,
-    "strictPropertyInitialization": false
+    "types": ["@cloudflare/workers-types", "@cloudflare/vitest-plugin/types"],
+    "lib": ["ES2023"],
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "build",
-    "worker.js",
-    "setup-tests.ts",
-    "**/*.spec.ts"
-  ]
+  "include": ["src", "test", "scripts", "*.ts"]
 }
