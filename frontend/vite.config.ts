@@ -354,7 +354,14 @@ export default defineConfig(({ mode }): UserConfig => {
       alias: [
         ...workspacePackagesAlias,
         ...(isDevelopment
-          ? []
+          ? env["FIREBASE_EMULATOR"] === "false"
+            ? []
+            : [
+                {
+                  find: /\/constants\/firebase-config$/,
+                  replacement: "/constants/firebase-config-emulator",
+                },
+              ]
           : [
               {
                 find: /\/constants\/firebase-config$/,

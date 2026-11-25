@@ -1,5 +1,4 @@
-lastId.txt
-log_success.txt
-log_failed.txt
-build
-worker.*
+dist
+.wrangler
+.dev.vars*
+worker-configuration.d.ts

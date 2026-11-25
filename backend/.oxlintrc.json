@@ -7,6 +7,17 @@
   ],
   "overrides": [
     {
+      "files": ["test/**/*.ts"],
+      "rules": {
+        "no-explicit-any": "off",
+        "no-unsafe-member-access": "off",
+        "no-unsafe-assignment": "off",
+        "no-unsafe-call": "off",
+        "no-unsafe-return": "off",
+        "no-unsafe-argument": "off"
+      }
+    },
+    {
       "files": ["src/**/*.ts"],
       "rules": {
         "import/no-cycle": "off" //todo: fix cycles and turn this on

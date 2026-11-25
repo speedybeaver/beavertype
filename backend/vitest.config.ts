@@ -1,54 +1,33 @@
-import { defineConfig, UserWorkspaceConfig } from "vitest/config";
+import path from "node:path";
+import { cloudflareTest, readD1Migrations } from "@cloudflare/vitest-plugin";
+import { defineConfig, type UserWorkspaceConfig } from "vitest/config";
 
 export const projects: UserWorkspaceConfig[] = [
   {
+    plugins: [
+      cloudflareTest(async () => ({
+        wrangler: {
+          configPath: path.join(import.meta.dirname, "wrangler.jsonc"),
+        },
+        miniflare: {
+          bindings: {
+            TEST_MIGRATIONS: await readD1Migrations(
+              path.join(import.meta.dirname, "migrations"),
+            ),
+            MODE: "test",
+            FIREBASE_PROJECT_ID: "demo-test",
+            // unsigned emulator tokens; the RS256 path is tested in auth.spec.ts
+            FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:1",
+          },
+        },
+      })),
+    ],
     test: {
       name: { label: "unit", color: "blue" },
-      setupFiles: ["__tests__/setup-tests.ts"],
-      include: ["__tests__/**/*.spec.ts"],
-      exclude: ["__tests__/__integration__"],
-      sequence: {
-        groupOrder: 0,
-      },
-    },
-  },
-  {
-    test: {
-      name: { label: "integration", color: "yellow" },
-      setupFiles: ["__tests__/__integration__/setup-integration-tests.ts"],
-      globalSetup: "__tests__/__integration__/global-setup.ts",
-      include: ["__tests__/__integration__/**/*.spec.ts"],
-      exclude: ["**/*.isolated.spec.ts"],
-
-      sequence: {
-        concurrent: false,
-        groupOrder: 1,
-      },
-    },
-  },
-  {
-    test: {
-      name: { label: "integration-isolated", color: "magenta" },
-      setupFiles: ["__tests__/__integration__/setup-integration-tests.ts"],
-      globalSetup: "__tests__/__integration__/global-setup.ts",
-      include: ["__tests__/__integration__/**/*.isolated.spec.ts"],
-
-      sequence: {
-        concurrent: false,
-        groupOrder: 2,
-      },
-      pool: "threads",
-      maxWorkers: 1,
+      include: ["test/**/*.spec.ts"],
+      setupFiles: ["test/setup.ts"],
     },
   },
 ];
-export default defineConfig({
-  test: {
-    projects: projects,
-    environment: "node",
-    pool: "forks",
-    coverage: {
-      include: ["**/*.ts"],
-    },
-  },
-});
+
+export default defineConfig({ test: { projects } });

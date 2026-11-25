@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "beavertype-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-09",
+  "observability": { "enabled": true },
+  "vars": {
+    "MODE": "production",
+    "FIREBASE_PROJECT_ID": "beavertype",
+    // public web API key from the Firebase console
+    "FIREBASE_API_KEY": "",
+    // comma separated, allowed CORS origins
+    "CORS_ORIGINS": "https://beavertype.com",
+  },
+  // secrets (wrangler secret put): RECAPTCHA_SECRET
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "beavertype",
+      // placeholder: `wrangler d1 create beavertype` and paste the id here before deploying
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations",
+    },
+  ],
+  // ponytail: unused, reserved for keystroke logs
+  "r2_buckets": [{ "binding": "BLOBS", "bucket_name": "beavertype-blobs" }],
+}
